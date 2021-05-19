@@ -96,19 +96,3 @@ export function SelectClarityThreshold() {
     </Form>
   );
 }
-
-export function SelectDisplayType() {
-  const displayType = useStoreState((state) => state.displayType);
-  const setDisplayType = useStoreActions((actions) => actions.setDisplayType);
-
-  return (
-    <Select
-      selected={displayType}
-      onSelect={setDisplayType}
-      choices={[
-        { value: 'chart', desc: 'Linear Chart' },
-        { value: 'circle', desc: 'Circle Chart' },
-      ]}
-    />
-  );
-}

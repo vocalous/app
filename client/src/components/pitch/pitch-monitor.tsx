@@ -21,6 +21,13 @@ interface PitchProps {
   }>;
 }
 
+// Converts byte buffer to float buffer. Buffers must have same length.
+const convertByteToFloatBuffer = (byteBuf, floatBuf) => {
+  for (let i = 0; i < byteBuf.length; i++) {
+    floatBuf[i] = byteBuf[i] / 128 - 1;
+  }
+};
+
 /**
  * While `enabled` is truthy, get the pitch from the input source,
  * and pass its frequency and clarity to `pitchRenderer`.
@@ -63,13 +70,19 @@ export function PitchMonitor({
       .call('createDetector', detectorName, windowSize, windowSize / 2);
     const pitchSetup = pitchSetupRef.current;
     pitchSetup.buffer = new Float32Array(windowSize);
-    pitchSetup.audioContext = new AudioContext();
+    // Old browsers use webkitAudioContext
+    pitchSetup.audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
     // Create an AudioNode from the stream.
     const mediaStreamSource = pitchSetup.audioContext.createMediaStreamSource(
       stream
     );
     // Connect it to the destination.
     pitchSetup.analyser = pitchSetup.audioContext.createAnalyser();
+    if (pitchSetup.analyser.getFloatTimeDomainData === undefined) {
+      // byte buffer is needed for support for incomplete audio API implementation
+      pitchSetup.byteBuffer = new Uint8Array(windowSize);
+    }
     pitchSetup.analyser.fftSize = windowSize;
     mediaStreamSource.connect(pitchSetup.analyser);
   }, [pitchSetupRef, windowSize, detectorName, stream, workerConnection]);
@@ -80,14 +93,21 @@ export function PitchMonitor({
       pendingRef.current = true;
 
       const pitchSetup = pitchSetupRef.current;
-      const { analyser, buffer, audioContext } = pitchSetup;
+      const { analyser, buffer, byteBuffer, audioContext } = pitchSetup;
       if (!analyser || !buffer || !audioContext) {
         console.warn(
           'Trying to update the pitch, but missing an analyser/buffer/audioContext'
         );
         return;
       }
-      analyser.getFloatTimeDomainData(buffer);
+      if (analyser.getFloatTimeDomainData !== undefined) {
+        analyser.getFloatTimeDomainData(buffer);
+      } else {
+        // Some browsers do not have AnalyserNode.getFloatTimeDomainData() yet,
+        // so use getByteTimeDomainData method instead.
+        analyser.getByteTimeDomainData(byteBuffer);
+        convertByteToFloatBuffer(byteBuffer, buffer);
+      }
       const result = await workerConnection
         .remoteHandle()
         .call(

@@ -7,15 +7,27 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
+    "prettier:check-staged": "pretty-quick --staged --check --pattern '**/*.{js,jsx,ts,tsx,css,html}'",
+    "prettier:write-staged": "pretty-quick --staged --write --pattern '**/*.{js,jsx,ts,tsx,css,html}'",
+    "prettier:check-all": "prettier --check 'src/**/*.{js,jsx,ts,tsx,css,html}'",
+    "prettier:write-all": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,html}'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "d3-scale": "^2.2.2",
     "lodash-es": "^4.17.11"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettier:write-staged"
+    }
+  },
   "devDependencies": {
     "@types/d3-scale": "^2.1.1",
     "@types/lodash-es": "^4.17.3",
+    "husky": "^6.0.0",
+    "prettier": "^2.3.0",
+    "pretty-quick": "^3.1.0",
     "typescript": "^3.3.3333"
   }
 }

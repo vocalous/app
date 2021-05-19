@@ -1,0 +1,56 @@
+.heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #20a4f3;
+  color: white;
+  min-height: 15em;
+}
+
+.heading h1 {
+  font-size: 3.5em;
+  letter-spacing: 0.05em;
+}
+
+.song-info {
+  background-color: #faf0ca;
+  padding: 2em 0 2em 0;
+}
+
+.song-info-details {
+  padding: 0.5em 0 1em 0;
+}
+
+.container-about {
+  padding: 2em 0 8em 0;
+}
+
+.about-toggler {
+  cursor: pointer;
+}
+
+.toggler-caret {
+  margin-right: 0.2em;
+}
+
+#about-data {
+  margin-top: 1em;
+}
+
+.btn-start {
+  background-color: #20a4f3 !important;
+  background-color: #20a4f3 !important;
+}
+
+.btn-start-content {
+  display: flex;
+  align-items: center;
+  padding: 0.4em 2em;
+}
+
+.btn-start-text {
+  font-family: 'Fira Sans';
+  font-size: 1.7em;
+  margin-right: 0.5em;
+}

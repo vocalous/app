@@ -1,4 +1,20 @@
-export const NOTE_STRINGS: string[] = ["C", "D♭", "D", "E♭", "E", "F", "G♭", "G", "A♭", "A", "B♭", "B"];
+// Notes start normally from C but we start from F note by using offset.
+export const NOTE_OFFSET = 7;
+
+export const NOTE_STRINGS: string[] = [
+  'F',
+  'F♯',
+  'G',
+  'G♯',
+  'A',
+  'A♯',
+  'B',
+  'C',
+  'C♯',
+  'D',
+  'D♯',
+  'E',
+];
 
 export const OCTAVE_COLORS: [number, number, number][] = [
   [121, 85, 72], // brown

@@ -1,0 +1,37 @@
+language: node_js
+node_js:
+  - 14
+
+# cache node_modules directories
+cache:
+  directories:
+    - client/node_modules
+    - display/node_modules
+    - $HOME/.cargo
+    - wasm/target
+
+before_script:
+  # install rustup if not cached
+  - test -f $HOME/.cargo/env || curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+  - source "$HOME/.cargo/env"
+  # set default toolchain set
+  - rustup default stable
+  # install wasm-pack cargo crate if not cached
+  - test -f $HOME/.cargo/bin/wasm-pack || cargo install --version 0.9.1 wasm-pack
+  # build web assembly component
+  - cd wasm && wasm-pack build --target web
+  # install node modules
+  - cd ../display && npm ci
+  - cd ../client && npm ci
+  - cd $TRAVIS_BUILD_DIR
+
+script:
+  # run prettier to validate
+  - cd client && npm run prettier:check-all
+  - cd ../display && npm run prettier:check-all
+  # lint the code
+  - cd ../client && npm run lint
+  # build the display component
+  - cd ../display && npm run build
+  # build the app
+  - cd ../client && npm run build

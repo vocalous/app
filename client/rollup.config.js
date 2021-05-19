@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import copy from 'rollup-plugin-copy';

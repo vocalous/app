@@ -9,7 +9,21 @@ import {
 import { Connection, ParentHandshake, WorkerMessenger } from 'post-me';
 
 type Detector = 'mcleod' | 'autocorrelation';
-type DisplayType = 'chart' | 'circle';
+
+type ErrorType = 'audio-context' | 'mic-stream' | 'worker';
+
+interface IMelodyNote {
+  start: number;
+  duration: number;
+  pitch: number;
+}
+
+type IMelodyNotes = IMelodyNote[];
+
+interface Melody {
+  title: string;
+  notes: IMelodyNotes;
+}
 
 interface StoreModel {
   windowSize: number;
@@ -17,9 +31,6 @@ interface StoreModel {
 
   detectorName: Detector;
   setDetectorName: Action<StoreModel, Detector>;
-
-  displayType: DisplayType;
-  setDisplayType: Action<StoreModel, DisplayType>;
 
   clarityThreshold: number;
   setClarityThreshold: Action<StoreModel, number>;
@@ -40,29 +51,31 @@ interface StoreModel {
   workerConnection: Connection | null | undefined;
   setWorkerConnection: Action<StoreModel, Connection | null>;
   initializeWorker: Thunk<StoreModel, void>;
+
+  melody: Melody;
+  setMelodyNotes: Action<StoreModel, IMelodyNotes>;
+  error: ErrorType;
 }
 
 export const store = createStore<StoreModel>({
   // Default values
-  windowSize: 1024,
+  windowSize: 2048, // 1024
   detectorName: 'mcleod',
-  displayType: 'chart',
-  clarityThreshold: 0.5,
+  clarityThreshold: 0.7, // 0.5
   enabled: false,
   loading: false,
   loaded: false,
   stream: null,
   audioOptions: { audio: { echoCancellation: true, autoGainControl: true } },
   workerConnection: null,
+  melody: {},
+  error: null,
 
   setWindowSize: action((state, payload) => {
     state.windowSize = payload;
   }),
   setDetectorName: action((state, payload) => {
     state.detectorName = payload;
-  }),
-  setDisplayType: action((state, payload) => {
-    state.displayType = payload;
   }),
   setClarityThreshold: action((state, payload) => {
     state.clarityThreshold = payload;
@@ -82,6 +95,18 @@ export const store = createStore<StoreModel>({
   setWorkerConnection: action((state, payload) => {
     state.workerConnection = payload;
   }),
+  setError: action((state, payload) => {
+    state.error = payload;
+  }),
+  checkAudioContextSupport: thunk((actions, payload, { getState }) => {
+    // Safari and old versions of Chrome use window.webkitAudioContext
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext === undefined) {
+      // browser does not support Audio Context
+      actions.setError('audio-context');
+      console.error('Browser does not have window.AudioContext support');
+    }
+  }),
   initializeStream: thunk(async (actions, payload, { getState }) => {
     const state = getState();
     const options = state.audioOptions;
@@ -93,6 +118,7 @@ export const store = createStore<StoreModel>({
       actions.setLoading(false);
       actions.setLoaded(true);
     } catch (e) {
+      actions.setError('mic-stream');
       console.error(e);
       actions.setStream(null);
       actions.setLoading(false);
@@ -123,9 +149,14 @@ export const store = createStore<StoreModel>({
       const connection = await ParentHandshake(messenger, {}, 5, 1000);
       actions.setWorkerConnection(connection);
     } catch (e) {
+      actions.setError('worker');
       console.error('Failed to connect to worker', e);
       actions.setWorkerConnection(null);
     }
+  }),
+
+  setMelodyNotes: action((state, payload) => {
+    state.melody.notes = payload;
   }),
 });
 

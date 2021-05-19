@@ -1,26 +1,8 @@
-# Pitch Detection App
-An open source pitch detection app that uses Rust and WebAssembly
+# Train Vocal
 
-## Live Demo
-[![Demo Page](./demo.png)](https://alesgenova.github.io/pitch-detection-app/)
+An open source app that helps you to train your singing skills.
 
-## Components
-### Core Pitch Detection Library
-- Rust ([source](https://github.com/alesgenova/pitch-detection))
-
-### Communication with web worker
-- post-me ([source](https://github.com/alesgenova/post-me))
-
-### WebAssembly Wrapper
-- Rust / wasm-bindgen ([source](https://github.com/alesgenova/pitch-detection-app/tree/master/wasm))
-
-### Pitch Visualization
-- TypeScript, HTML5 Canvas, D3 ([source](https://github.com/alesgenova/pitch-detection-app/tree/master/display))
-
-### Single Page App
-- React ([source](https://github.com/alesgenova/pitch-detection-app/tree/master/client))
-
-### Building
+## Building
 ```bash
 # Build wasm
 # Prerequisite: cargo and wasm-pack
@@ -37,3 +19,8 @@ cd ../client
 npm install
 npm run start
 ```
+
+## Credits
+
+This app is built on excellent [pitch detection app](https://alesgenova.github.io/pitch-detection-app/)
+by Alessandro Genova and Jason Siefken.

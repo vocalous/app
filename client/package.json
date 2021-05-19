@@ -1,7 +1,7 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "homepage": "http://alesgenova.github.io/pitch-detection-app",
+  "homepage": "https://vocalous.github.io/app",
   "license": "MIT",
   "private": true,
   "dependencies": {
@@ -23,10 +23,12 @@
     "pitch-detection-wasm": "file:../wasm/pkg",
     "pitch-display": "file:../display",
     "post-me": "^0.3.0",
+    "qs": "^6.10.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-bootstrap-icons": "^1.3.0",
     "react-dom": "^17.0.1",
+    "react-meta-tags": "^1.0.1",
     "react-scripts": "^4.0.1",
     "rollup": "^2.36.0",
     "rollup-plugin-copy": "^3.3.0",
@@ -36,6 +38,7 @@
   },
   "scripts": {
     "build:worker": "rollup -c",
+    "lint": "eslint .",
     "start": "npm run build:worker && react-scripts start",
     "build": "npm run build:worker && react-scripts build",
     "test": "react-scripts test",
@@ -46,13 +49,31 @@
     "prettier:write-staged": "pretty-quick --staged --write --pattern '**/*.{js,jsx,ts,tsx,css,html}'",
     "prettier:check-modified": "pretty-quick --check --pattern '**/*.{js,jsx,ts,tsx,css,html}'",
     "prettier:write-modified": "pretty-quick --write --pattern '**/*.{js,jsx,ts,tsx,css,html}'",
-    "prettier:check-all": "prettier --check '**/*.{js,jsx,ts,tsx,css,html}'",
-    "prettier:write-all": "prettier --write '**/*.{js,jsx,ts,tsx,css,html}'"
+    "prettier:check-all": "prettier --check 'src/**/*.{js,jsx,ts,tsx,css,html}'",
+    "prettier:write-all": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,html}'"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "ignorePatterns": [
+      "build/",
+      "public/pitch-detection/"
+    ],
+    "rules": {
+      "quotes": [
+        "error",
+        "single"
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/*.ts?(x)"
+        ],
+        "rules": {}
+      }
     ]
   },
   "husky": {

@@ -2,7 +2,6 @@ import React from 'react';
 
 import PitchComponent from './components/pitch';
 import { PitchMonitor } from './components/pitch/pitch-monitor';
-import { CircleChart } from './components/circle-chart/circle-chat';
 import { AppFrame } from './components/main/app-frame';
 import { useStoreActions, useStoreState } from './model';
 import { About } from './components/main/about';
@@ -13,7 +12,6 @@ function App() {
   const detectorName = useStoreState((state) => state.detectorName);
   const windowSize = useStoreState((state) => state.windowSize);
   const clarityThreshold = useStoreState((state) => state.clarityThreshold);
-  const displayType = useStoreState((state) => state.displayType);
   const enabled = useStoreState((state) => state.enabled);
 
   const { loaded, stream, workerConnection } = useStoreState((state) => ({
@@ -23,19 +21,21 @@ function App() {
     workerConnection: state.workerConnection,
   }));
 
-  const { initializeWorker } = useStoreActions((actions) => actions);
+  const { checkAudioContextSupport, initializeWorker } = useStoreActions(
+    (actions) => actions
+  );
 
   React.useEffect(() => {
     (async () => {
       await initializeWorker();
       console.log('Worker initialized');
+      await checkAudioContextSupport();
     })();
-  }, [initializeWorker]);
+  }, [checkAudioContextSupport, initializeWorker]);
 
   let mainDisplay = <About />;
   if (loaded && stream && workerConnection) {
-    const pitchRenderer =
-      displayType === 'circle' ? CircleChart : PitchComponent;
+    const pitchRenderer = PitchComponent;
     mainDisplay = (
       <PitchMonitor
         stream={stream}

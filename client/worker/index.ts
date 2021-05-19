@@ -8,6 +8,7 @@ import 'regenerator-runtime';
 import { WorkerMethods } from './types';
 
 init('./pitch_detection_wasm_bg.wasm').then(() => {
+  // eslint-disable-next-line no-restricted-globals
   const messenger = new WorkerMessenger({ worker: self as any });
 
   let detector:
@@ -38,7 +39,7 @@ init('./pitch_detection_wasm_bg.wasm').then(() => {
 
     getPitch: (signal, sampleRate, powerThreshold, clarityThreshold) => {
       if (!detector) {
-        throw new Error(`Detector not initialized`);
+        throw new Error('Detector not initialized');
       }
 
       let result = new Float32Array(2);
