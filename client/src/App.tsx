@@ -4,7 +4,7 @@ import PitchComponent from './components/pitch';
 import { PitchMonitor } from './components/pitch/pitch-monitor';
 import { AppFrame } from './components/main/app-frame';
 import { useStoreActions, useStoreState } from './model';
-import { About } from './components/main/about';
+import Main from './components/main';
 
 function App() {
   const POWER_THRESHOLD = 0.15;
@@ -33,7 +33,7 @@ function App() {
     })();
   }, [checkAudioContextSupport, initializeWorker]);
 
-  let mainDisplay = <About />;
+  let mainDisplay = <Main />;
   if (loaded && stream && workerConnection) {
     const pitchRenderer = PitchComponent;
     mainDisplay = (

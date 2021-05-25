@@ -75,6 +75,7 @@ function PitchComponent({ freq, clarity }: PitchProps) {
   }, []);
 
   const notes = useStoreState((state) => state.melody.notes);
+  const hasNotes = notes && notes.notes && notes.notes.length;
   useEffect(() => {
     if (pitchDisplay.current && notes && notes.notes) {
       pitchDisplay.current.setMelodyNotes(notes.notes);
@@ -118,7 +119,7 @@ function PitchComponent({ freq, clarity }: PitchProps) {
   const skipIntroTitle = 'Skip intro';
   const skipIntroBody = 'Press and hold until you start singing.';
   const skipIntroPopover = (
-    <Popover id="popover-skip-intro">
+    <Popover id="popover-skip-intro" className="unselectable">
       <Popover.Title as="h3">{skipIntroTitle}</Popover.Title>
       <Popover.Content>{skipIntroBody}</Popover.Content>
     </Popover>
@@ -126,34 +127,42 @@ function PitchComponent({ freq, clarity }: PitchProps) {
 
   return (
     <React.Fragment>
-      <div className="full" ref={onDisplayRef} />
-      <div className="navbar-space" />
-      <Navbar fixed="bottom" bg="dark" className="justify-content-center">
-        <OverlayTrigger
-          show={inIntro}
-          placement="top"
-          overlay={skipIntroPopover}
-        >
-          <SkipStartButton
-            onPress={() => pitchDisplay.current.seekToFirstNote()}
+      <div className="full unselectable" ref={onDisplayRef} />
+      <div className="navbar-space unselectable" />
+      <Navbar
+        fixed="bottom"
+        bg="dark"
+        className="justify-content-center unselectable"
+      >
+        {hasNotes && (
+          <OverlayTrigger
+            show={inIntro}
+            placement="top"
+            overlay={skipIntroPopover}
+          >
+            <SkipStartButton
+              onPress={() => pitchDisplay.current.seekToFirstNote()}
+              onRelease={() => pitchDisplay.current.playSong()}
+              onCancel={() => pitchDisplay.current.playSong()}
+              className="btn-skip-start"
+              size={btnSize}
+              color={btnColor}
+              colorPressed={btnColorPressed}
+              inIntro={inIntro}
+            />
+          </OverlayTrigger>
+        )}
+        {hasNotes && (
+          <PauseButton
+            onPress={() => pitchDisplay.current.pauseSong()}
             onRelease={() => pitchDisplay.current.playSong()}
             onCancel={() => pitchDisplay.current.playSong()}
-            className="btn-skip-start"
+            className="btn-pause"
             size={btnSize}
             color={btnColor}
             colorPressed={btnColorPressed}
-            inIntro={inIntro}
           />
-        </OverlayTrigger>
-        <PauseButton
-          onPress={() => pitchDisplay.current.pauseSong()}
-          onRelease={() => pitchDisplay.current.playSong()}
-          onCancel={() => pitchDisplay.current.playSong()}
-          className="btn-pause"
-          size={btnSize}
-          color={btnColor}
-          colorPressed={btnColorPressed}
-        />
+        )}
         <StopButton
           onRelease={onStop}
           className="btn-stop"
@@ -161,14 +170,16 @@ function PitchComponent({ freq, clarity }: PitchProps) {
           color={btnColor}
           colorPressed={btnColorPressed}
         />
-        <ForwardButton
-          onPress={() => pitchDisplay.current.fastForwardSong()}
-          onRelease={() => pitchDisplay.current.playSong()}
-          className="btn-forward"
-          size={btnSize}
-          color={btnColor}
-          colorPressed={btnColorPressed}
-        />
+        {hasNotes && (
+          <ForwardButton
+            onPress={() => pitchDisplay.current.fastForwardSong()}
+            onRelease={() => pitchDisplay.current.playSong()}
+            className="btn-forward"
+            size={btnSize}
+            color={btnColor}
+            colorPressed={btnColorPressed}
+          />
+        )}
       </Navbar>
     </React.Fragment>
   );

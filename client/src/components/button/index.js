@@ -65,9 +65,38 @@ export const StopButton = (props) => (
   <ControlButton Icon={StopCircleFill} {...props} />
 );
 
-export const SkipStartButton = (props) => (
-  <ControlButton
-    Icon={props.inIntro ? SkipEndCircleFill : SkipStartCircleFill}
-    {...props}
-  />
-);
+export const SkipStartButton = (props) => {
+  // Change icon until user releases the button in skip intro mode.
+  // This prevents a bug on iOS where long pressing the button
+  // never receives onTouchCancel event when the icon changes meanwhile.
+  const [skipIntroMode, setSkipIntroMode] = useState(false);
+  const onPress = () => {
+    if (props.inIntro) {
+      setSkipIntroMode(true);
+    }
+    props.onPress();
+  };
+  const onCancel = () => {
+    if (skipIntroMode) {
+      setSkipIntroMode(false);
+    }
+    props.onCancel();
+  };
+  const onRelease = () => {
+    if (skipIntroMode) {
+      setSkipIntroMode(false);
+    }
+    props.onRelease();
+  };
+  const icon =
+    props.inIntro || skipIntroMode ? SkipEndCircleFill : SkipStartCircleFill;
+  return (
+    <ControlButton
+      Icon={icon}
+      {...props}
+      onPress={onPress}
+      onRelease={onRelease}
+      onCancel={onCancel}
+    />
+  );
+};

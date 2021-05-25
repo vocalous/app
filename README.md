@@ -1,6 +1,6 @@
-# Train Vocal
+# Vocalous
 
-An open source app that helps you to train your singing skills.
+An open source web app that help to practice singing by tracking the pitch.
 
 ## Building
 ```bash

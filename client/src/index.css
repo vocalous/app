@@ -58,24 +58,58 @@ select {
   height: 100%;
 }
 
-nav.navbar {
-  background-color: #0c1b33 !important;
-  height: 8em;
+.nav {
+  justify-content: center;
+  padding: 2em;
+  padding: 0 0 2em 0;
+  background-color: #001233;
 }
 
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+.nav-pills .nav-item {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.nav-pills .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 100em !important;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: #444 !important;
+  background-color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+.tab-content {
+  margin-top: 2em;
+  margin-bottom: 4em;
+}
+
+.heading {
   display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 2em;
   align-items: center;
-  height: 4rem;
-  box-shadow: 0 0.25rem 0.5rem #777777;
-  font-size: 1.5rem;
-  font-weight: bold;
-  padding-left: 1rem;
-  z-index: 10;
+  background-color: #001233;
+  color: white;
+  min-height: 11em;
+}
+
+.heading h1 {
+  font-size: 3em;
+  letter-spacing: 0.05em;
+  font-family: 'Comfortaa', sans-serif !important;
+  font-weight: 700;
+  color: #ffdb4c;
+}
+
+/* Fix for iOS bug where it has margin */
+.popover-header {
+  margin-top: 0;
 }
 
 .content-container {
@@ -203,4 +237,8 @@ nav.navbar {
   display: block;
   text-align: left;
   font-style: italic;
+}
+
+.unselectable {
+  user-select: none;
 }

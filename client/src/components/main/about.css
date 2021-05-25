@@ -1,20 +1,7 @@
-.heading {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #20a4f3;
-  color: white;
-  min-height: 15em;
-}
-
-.heading h1 {
-  font-size: 3.5em;
-  letter-spacing: 0.05em;
-}
-
 .song-info {
+  margin-top: -2em;
   background-color: #faf0ca;
+  background-color: #e4e6ec;
   padding: 2em 0 2em 0;
 }
 
@@ -22,25 +9,32 @@
   padding: 0.5em 0 1em 0;
 }
 
-.container-about {
-  padding: 2em 0 8em 0;
-}
-
-.about-toggler {
-  cursor: pointer;
-}
-
-.toggler-caret {
-  margin-right: 0.2em;
-}
-
 #about-data {
   margin-top: 1em;
 }
 
-.btn-start {
-  background-color: #20a4f3 !important;
-  background-color: #20a4f3 !important;
+.btn.btn-start {
+  margin-top: 2em;
+  border-color: #fff;
+  border-width: 0;
+  border-radius: 10em;
+  background-color: #0466c8;
+}
+
+.btn.btn-start:hover {
+  background-color: #001233;
+  border-color: #fff;
+  border-width: 0;
+}
+
+.btn.btn-start:active {
+  background-color: green;
+  border-color: yellow;
+}
+
+.btn.btn-start:focus {
+  background-color: #001233;
+  border-color: yellow;
 }
 
 .btn-start-content {

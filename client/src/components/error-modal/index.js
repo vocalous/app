@@ -18,8 +18,7 @@ export default function ErrorModal({ error, show, onClose }) {
     txt = (
       <div>
         Yikes! It seems that this app does not work on this device and/or
-        browser. iPhones and iPads are not yet supporting the required
-        technology. You can run this app on other devices meanwhile.
+        browser. Try Google Chrome.
       </div>
     );
   }

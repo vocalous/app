@@ -93,12 +93,20 @@ class PitchDisplay {
     let w = this.container.clientWidth;
     let h = this.container.clientHeight;
 
-    this.bgCanvas.width = w;
-    this.bgCanvas.height = h;
-    this.melodyCanvas.width = w;
-    this.melodyCanvas.height = h;
-    this.noteCanvas.width = w;
-    this.noteCanvas.height = h;
+    // If device pixel ratio > 1 like in Retina display, canvas content
+    // looks blurry if not scaled
+    const dpr = window.devicePixelRatio;
+    const scaledW = Math.floor(dpr * w);
+    const scaledH = Math.floor(dpr * h);
+    this.bgCanvas.width = scaledW;
+    this.bgCanvas.height = scaledH;
+    this.bgContext.scale(dpr, dpr);
+    this.melodyCanvas.width = scaledW;
+    this.melodyCanvas.height = scaledH;
+    this.melodyContext.scale(dpr, dpr);
+    this.noteCanvas.width = scaledW;
+    this.noteCanvas.height = scaledH;
+    this.noteContext.scale(dpr, dpr);
 
     this.scaleX = scaleLinear()
       .domain([-(this.timeSpan / 2), this.timeSpan / 2])
@@ -227,6 +235,10 @@ class PitchDisplay {
     this.drawMelody(songPos);
     this.drawNotes();
 
+    if (this.melodyNotes.length) {
+      this.drawTimeMarkers(songPos);
+    }
+
     this.checkIntroState(songPos);
   }
 
@@ -251,8 +263,9 @@ class PitchDisplay {
   }
 
   drawBackground() {
-    let w = this.bgCanvas.width;
-    let h = this.bgCanvas.height;
+    let w = this.container.clientWidth;
+    let h = this.container.clientHeight;
+
     this.bgContext.fillStyle = this.background;
     this.bgContext.clearRect(0, 0, w, h);
     this.bgContext.fillRect(0, 0, w, h);
@@ -262,7 +275,7 @@ class PitchDisplay {
       this.bgContext.fillStyle = this.highlight + '55';
       this.bgContext.fillRect(0, y, w, 1);
       this.bgContext.fillStyle = this.highlight;
-      this.bgContext.font = '14px Sans';
+      this.bgContext.font = '14px Fira Sans';
       this.bgContext.fillText(
         NOTE_STRINGS[i % NOTE_STRINGS.length],
         this.scaleX(0) + 20,
@@ -275,8 +288,8 @@ class PitchDisplay {
   }
 
   drawNotes() {
-    let w = this.noteCanvas.width;
-    let h = this.noteCanvas.height;
+    let w = this.container.clientWidth;
+    let h = this.container.clientHeight;
 
     this.noteContext.clearRect(0, 0, w, h);
     this.noteContext.beginPath();
@@ -303,22 +316,6 @@ class PitchDisplay {
       });
     }
 
-    // Draw lines
-    const timeCutoff = 500;
-    this.noteContext.beginPath();
-    for (let i = 1; i < notes.length; ++i) {
-      const { x, y, time } = notes[i];
-      const prevTime = notes[i - 1].time;
-      if (time - prevTime > timeCutoff) {
-        this.noteContext.stroke();
-        this.noteContext.beginPath();
-        this.noteContext.moveTo(x, y);
-      } else {
-        this.noteContext.lineTo(x, y);
-      }
-    }
-    this.noteContext.stroke();
-
     // Draw circles
     for (let note of notes) {
       const { x, y, clarity, color } = note;
@@ -331,9 +328,27 @@ class PitchDisplay {
     }
   }
 
+  drawTimeMarkers(songPos: number) {
+    let h = this.container.clientHeight;
+    const marks = [];
+    const interval = 1000;
+    for (let i = -this.timeSpan / 2; i <= this.timeSpan / 2; i += interval) {
+      marks.push({
+        x: this.scaleX(i - (songPos % interval)),
+        y: h - 20,
+      });
+    }
+    this.noteContext.fillStyle = this.highlight;
+    for (let mark of marks) {
+      this.noteContext.beginPath();
+      this.noteContext.arc(mark.x, mark.y, 2, 0, Math.PI * 2);
+      this.noteContext.fill();
+    }
+  }
+
   drawMelody(songPos: number) {
-    let w = this.melodyCanvas.width;
-    let h = this.melodyCanvas.height;
+    let w = this.container.clientWidth;
+    let h = this.container.clientHeight;
 
     const ctx: CanvasRenderingContext2D = this.melodyContext;
     ctx.clearRect(0, 0, w, h);
