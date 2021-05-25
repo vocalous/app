@@ -102,10 +102,7 @@ function FileForm({ onComplete }) {
         />
       </Form.Group>
       <Form.Group controlId="import-file-group">
-        <Form.File
-          id="import-file"
-          custom
-        >
+        <Form.File id="import-file" custom>
           <Form.File.Input
             accept=".txt"
             isInvalid={!!fileError}
@@ -114,7 +111,8 @@ function FileForm({ onComplete }) {
           />
           <Form.File.Label>UltraStar TXT file</Form.File.Label>
           <Form.Control.Feedback type="invalid">
-            Make sure the file is in UltraStar TXT format and it contains at least one note.
+            Make sure the file is in UltraStar TXT format and it contains at
+            least one note.
           </Form.Control.Feedback>
         </Form.File>
         <Form.Text className="text-muted">
@@ -122,7 +120,8 @@ function FileForm({ onComplete }) {
         </Form.Text>
         {fileError && (
           <div className="invalid-feedback">
-            Foo Something wrong with the file. Make sure it is UltraStar TXT file or it contains at least one note.
+            Foo Something wrong with the file. Make sure it is UltraStar TXT
+            file or it contains at least one note.
           </div>
         )}
       </Form.Group>

@@ -83,7 +83,7 @@ function SongInfo() {
               <div>
                 <strong>{title ? title : 'Untitled'}</strong>
               </div>
-              {author && (<div>{author}</div>)}
+              {author && <div>{author}</div>}
               {music && (
                 <div>
                   Music: <ExternalLink link={music} target="music--page" />
