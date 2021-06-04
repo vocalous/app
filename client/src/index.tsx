@@ -6,7 +6,11 @@ import reportWebVitals from './reportWebVitals';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { StoreProvider } from 'easy-peasy';
+
 import { store } from './model';
+import { initializeTranslations } from './translations';
+
+initializeTranslations();
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Navbar, Popover, OverlayTrigger } from 'react-bootstrap';
-
+import { useTranslation } from 'react-i18next';
 import { PitchDisplay } from 'pitch-display';
 
 import {
@@ -37,6 +37,7 @@ export interface PitchProps {
 }
 
 function PitchComponent({ freq, clarity }: PitchProps) {
+  const { t } = useTranslation();
   const pitchDisplay = useRef();
   const [inIntro, setInIntro] = useState(false);
 
@@ -116,8 +117,8 @@ function PitchComponent({ freq, clarity }: PitchProps) {
     console.log('Stream Stopped');
   };
 
-  const skipIntroTitle = 'Skip intro';
-  const skipIntroBody = 'Press and hold until you start singing.';
+  const skipIntroTitle = t('SKIP.TITLE');
+  const skipIntroBody = t('SKIP.BODY');
   const skipIntroPopover = (
     <Popover id="popover-skip-intro" className="unselectable">
       <Popover.Title as="h3">{skipIntroTitle}</Popover.Title>

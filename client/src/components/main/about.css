@@ -47,4 +47,10 @@
   font-family: 'Fira Sans';
   font-size: 1.7em;
   margin-right: 0.5em;
+  text-transform: uppercase;
+}
+
+.btn-lang {
+  border: 0;
+  background: none;
 }

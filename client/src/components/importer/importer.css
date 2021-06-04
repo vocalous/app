@@ -1,3 +1,7 @@
+.btn-create {
+  text-transform: uppercase;
+}
+
 .result-container {
   overflow-wrap: break-word;
 }

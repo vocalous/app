@@ -1,36 +1,33 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 export default function ErrorModal({ error, show, onClose }) {
-  let txt = 'Oh no! Some error happened. Try using Google Chrome browser.';
+  const { t } = useTranslation();
+  let txt = t('ERROR.TXT.DEFAULT');
   if (error === 'mic-stream') {
     txt = (
       <div>
-        Oh no! This app cannot use your mic. Try to:
+        {t('ERROR.MIC.TITLE')}
         <ul>
-          <li>make sure you have the microphone connected</li>
-          <li>make sure you allowed this site to use your mic</li>
-          <li>use Google Chrome</li>
+          <li>{t('ERROR.MIC.1')}</li>
+          <li>{t('ERROR.MIC.2')}</li>
+          <li>{t('ERROR.MIC.3')}</li>
         </ul>
       </div>
     );
   } else if (error === 'audio-context') {
-    txt = (
-      <div>
-        Yikes! It seems that this app does not work on this device and/or
-        browser. Try Google Chrome.
-      </div>
-    );
+    txt = <div>{t('ERROR.NOT_SUPPORTED')}</div>;
   }
   return (
     <Modal show={show} onHide={onClose} backdrop="static" keyboard={false}>
       <Modal.Header closeButton>
-        <Modal.Title>Error 😰</Modal.Title>
+        <Modal.Title>{t('ERROR.TITLE')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>{txt}</Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
-          OK
+          {t('OK')}
         </Button>
       </Modal.Footer>
     </Modal>

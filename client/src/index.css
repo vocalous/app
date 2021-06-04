@@ -46,6 +46,10 @@ h3 {
   margin-bottom: 0.25rem;
 }
 
+.nav-item .nav-link {
+  text-transform: uppercase;
+}
+
 select {
   border: 0.05rem solid #777777;
   padding: 0.25rem;

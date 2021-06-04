@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import qs from 'qs';
 
 import { encodeS1 } from '../../services/s1Encoding';
@@ -9,6 +10,7 @@ import { parseUltraStarTxt } from '../../services/ultrastar-parser';
 import './importer.css';
 
 function FileForm({ onComplete }) {
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [musicLink, setMusicLink] = useState('');
@@ -88,14 +90,16 @@ function FileForm({ onComplete }) {
     setValidated(false);
   };
 
+  const txtSongTitle = t('CREATE.SONG.TITLE');
+
   return (
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Form.Group>
-        <Form.Label>Song title</Form.Label>
+        <Form.Label>{txtSongTitle}</Form.Label>
         <Form.Control
           required
           type="text"
-          placeholder="Song title"
+          placeholder={txtSongTitle}
           value={title}
           maxLength="64"
           onChange={(evt) => setTitle(evt.target.value)}
@@ -109,24 +113,19 @@ function FileForm({ onComplete }) {
             onChange={handleFileChange}
             required
           />
-          <Form.File.Label>UltraStar TXT file</Form.File.Label>
+          <Form.File.Label>
+            {t('CREATE.SONG.ULTRASTAR_TXT_FILE.LABEL')}
+          </Form.File.Label>
           <Form.Control.Feedback type="invalid">
-            Make sure the file is in UltraStar TXT format and it contains at
-            least one note.
+            {t('CREATE.SONG.ULTRASTAR_TXT_FILE.INVALID')}
           </Form.Control.Feedback>
         </Form.File>
         <Form.Text className="text-muted">
-          The notes file. The lyrics are ignored.
+          {t('CREATE.SONG.ULTRASTAR_TXT_FILE.HELP')}
         </Form.Text>
-        {fileError && (
-          <div className="invalid-feedback">
-            Foo Something wrong with the file. Make sure it is UltraStar TXT
-            file or it contains at least one note.
-          </div>
-        )}
       </Form.Group>
       <Form.Group>
-        <Form.Label>Link to song</Form.Label>
+        <Form.Label>{t('CREATE.SONG.SONG_LINK.LABEL')}</Form.Label>
         <Form.Control
           type="text"
           placeholder="https://songs.com/my-song"
@@ -134,11 +133,11 @@ function FileForm({ onComplete }) {
           onChange={(evt) => setMusicLink(evt.target.value)}
         />
         <Form.Text className="text-muted">
-          Optional link to the song where it can be played.
+          {t('CREATE.SONG.SONG_LINK.HELP')}
         </Form.Text>
       </Form.Group>
       <Form.Group>
-        <Form.Label>Link to lyrics</Form.Label>
+        <Form.Label>{t('CREATE.SONG.LYRICS_LINK.LABEL')}</Form.Label>
         <Form.Control
           type="text"
           placeholder="https://lyrics.com/my-lyrics"
@@ -146,11 +145,11 @@ function FileForm({ onComplete }) {
           onChange={(evt) => setLyricsLink(evt.target.value)}
         />
         <Form.Text className="text-muted">
-          Optional link to the song lyrics.
+          {t('CREATE.SONG.LYRICS_LINK.HELP')}
         </Form.Text>
       </Form.Group>
       <Form.Group>
-        <Form.Label>Link author</Form.Label>
+        <Form.Label>{t('CREATE.SONG.LINK_AUTHOR.LABEL')}</Form.Label>
         <Form.Control
           type="text"
           placeholder="John Doe <john@doe.com>"
@@ -159,21 +158,26 @@ function FileForm({ onComplete }) {
           onChange={(evt) => setAuthor(evt.target.value)}
         />
         <Form.Text className="text-muted">
-          Optional information about who generated this link. Name, email, etc.
+          {t('CREATE.SONG.LINK_AUTHOR.HELP')}
         </Form.Text>
       </Form.Group>
       <Form.Group controlId="use-tinyurl">
         <Form.Check
           type="switch"
           id="use-tinyurl-switch"
-          label="Shorten link with TinyURL"
+          label={t('CREATE.SONG.SHORTEN_LINK_TINYURL')}
           checked={useTinyURL}
           onChange={() => setUseTinyURL(!useTinyURL)}
         />
       </Form.Group>
       <Form.Group>
-        <Button type="submit" variant="secondary" disabled={creating}>
-          {creating ? 'CREATING...' : 'CREATE LINK'}
+        <Button
+          className="btn-create"
+          type="submit"
+          variant="secondary"
+          disabled={creating}
+        >
+          {t(`CREATE.SONG.BTN.${creating ? 'CREATING' : 'CREATE_LINK'}`)}
         </Button>
       </Form.Group>
     </Form>
@@ -195,6 +199,7 @@ function CopyButton({ url }) {
 }
 
 function Result({ url }) {
+  const { t } = useTranslation();
   if (!url) {
     return null;
   }
@@ -208,8 +213,8 @@ function Result({ url }) {
       <Row>
         <Col>
           <Card body>
-            <h4>The link is ready!</h4>
-            Anyone can practice the song using this link:
+            <h4>{t('CREATE.SONG.READY.TITLE')}</h4>
+            {t('CREATE.SONG.READY.BODY')}
             <br />
             <span className="created-link">{url}</span>
             <div className="float-right">
@@ -224,21 +229,20 @@ function Result({ url }) {
 
 export default function Importer() {
   const [url, setUrl] = useState();
+  const { t } = useTranslation();
 
   return (
     <Container>
       <Row className="mb-4">
         <Col>
           <div className="circled-nbr text-center">1</div>
-          First you need <strong>the notes file in UltraStar TXT format</strong>
-          . If you can't find the notes file, you can create one by using an
-          editor like these:
+          {t('CREATE.1.1')}
           <ul className="mt-3">
             <li>Yass - Karaoke Editor</li>
             <li>Performous Composer</li>
             <li>UltraStar Creator</li>
           </ul>
-          Note that lyrics will be ignored.
+          {t('CREATE.1.2')}
         </Col>
       </Row>
       <Row>

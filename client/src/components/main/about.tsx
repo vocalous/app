@@ -1,46 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Col, Row } from 'react-bootstrap';
+import { Translate } from 'react-bootstrap-icons';
+import { useTranslation } from 'react-i18next';
 
+import LanguageModal from '../language-modal';
 import './about.css';
 
 export default function About() {
+  const [showLangModal, setShowLangModal] = useState(false);
+  const { t } = useTranslation();
   return (
     <Container>
+      <Row className="mb-4">
+        <Col>
+          <button className="btn-lang" onClick={() => setShowLangModal(true)}>
+            <Translate size={40} color="#001233" />
+          </button>
+        </Col>
+      </Row>
       <Row>
         <Col>
-          <h3>FAQ</h3>
-          <h5>How does this app work?</h5>
-          <p>
-            If you opened this by a link that contains a melody, you can see the
-            information about it. By pressing start you can practice singing the
-            melody using your microphone.
-          </p>
-          <p>
-            If you can't see any song information, you can practice singing
-            without notes by pressing start.
-          </p>
-          <h5>Why doesn't this app work?</h5>
-          <p>
-            Make sure that your microphone is working and you have allowed this
-            site to use it. It's also possible that your browser does not
-            support the technology that this app uses. Try the newest Google
-            Chrome browser.
-          </p>
-          <h5>How does this app handle my voice?</h5>
-          <p>
-            The app respects your privacy. Your voice is not stored and is not
-            sent out from your browser. The app uses your mic only to detect the
-            pitch from your singing.
-          </p>
-          <h5>Where is the music?</h5>
-          <p>
-            This service does not contain any music for copyright reasons. Links
-            can be provided to play the music and to read the lyrics from other
-            services.
-          </p>
-          <h5>Will this app be always free?</h5>
-          <p>Yes. This is an open source project.</p>
-          <h3>Source</h3>
+          <h3>{t('FAQ.TITLE')}</h3>
+          <h5>{t('FAQ.MUSIC.TITLE')}</h5>
+          <p>{t('FAQ.MUSIC.BODY')}</p>
+          <h5>{t('FAQ.HOW_WORKS.TITLE')}</h5>
+          <p>{t('FAQ.HOW_WORKS.BODY1')}</p>
+          <p>{t('FAQ.HOW_WORKS.BODY2')}</p>
+          <h5>{t('FAQ.PROBLEM.TITLE')}</h5>
+          <p>{t('FAQ.PROBLEM.BODY')}</p>
+          <h5>{t('FAQ.PRIVACY.TITLE')}</h5>
+          <p>{t('FAQ.PRIVACY.BODY')}</p>
+          <h5>{t('FAQ.FREE.TITLE')}</h5>
+          <p>{t('FAQ.FREE.BODY')}</p>
+          <h3>{t('SOURCE')}</h3>
           <p>
             <a
               href="https://github.com/vocalous/app"
@@ -52,6 +44,10 @@ export default function About() {
           </p>
         </Col>
       </Row>
+      <LanguageModal
+        show={showLangModal}
+        onClose={() => setShowLangModal(false)}
+      />
     </Container>
   );
 }
