@@ -16,7 +16,7 @@ const resources = {
 
 export const getLanguages = () => [
   { id: 'en-US', name: 'English' },
-  { id: 'es-ES', name: 'Spanish' },
+  { id: 'es-ES', name: 'Español' },
   { id: 'fi-FI', name: 'Suomi' },
 ];
 
