@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import {
   PauseCircleFill,
-  SkipBackwardCircleFill,
   SkipEndCircleFill,
+  SkipForwardCircleFill,
   SkipStartCircleFill,
   StopCircleFill,
 } from 'react-bootstrap-icons';
@@ -54,7 +54,7 @@ function ControlButton({
 }
 
 export const ForwardButton = (props) => (
-  <ControlButton Icon={SkipBackwardCircleFill} {...props} />
+  <ControlButton Icon={SkipForwardCircleFill} {...props} />
 );
 
 export const PauseButton = (props) => (
