@@ -1,6 +1,7 @@
 # Vocalous
 
 An open source web app that help to practice singing by tracking the pitch.
+Branch autodelete test.
 
 ## Building
 ```bash
